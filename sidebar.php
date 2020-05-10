@@ -1,10 +1,11 @@
 <?php
-// Sidebar template
-$zass_sidebar_choice = apply_filters('zass_has_sidebar', '');
-?>
+/* banner-php */
+/**
+ * The sidebar containing the main widget area
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ */
 
-<?php if (function_exists('dynamic_sidebar') && $zass_sidebar_choice != 'none' && is_active_sidebar($zass_sidebar_choice) ) : ?>
-	<div class="sidebar">
-		<?php dynamic_sidebar($zass_sidebar_choice); ?>
-	</div>
-<?php endif;
+if(is_active_sidebar('sidebar-1')){
+    dynamic_sidebar('sidebar-1');
+}

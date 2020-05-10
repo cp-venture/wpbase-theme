@@ -1,101 +1,86 @@
 <?php
-// Search template
+/* banner-php */
+/**
+ * The main template file
+ *
+ * This is the most generic template file in a WordPress theme
+ * and one of the two required files for a theme (the other being style.css).
+ * It is used to display a page when nothing more specific matches a query.
+ * E.g., it puts together the home page when no home.php file exists.
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ */
 
-get_header();
+get_header(); 
 
-$zass_sidebar_choice = apply_filters('zass_has_sidebar', '');
+$sb_w = townhub_get_option('blog-sidebar-width','4');
 
-if ($zass_sidebar_choice != 'none') {
-	$zass_has_sidebar = is_active_sidebar($zass_sidebar_choice);
-} else {
-	$zass_has_sidebar = false;
-}
 
-$zass_offcanvas_sidebar_choice = apply_filters('zass_has_offcanvas_sidebar', '');
+if( townhub_get_option('show_blog_header', false) ) :?>
+<!--  section  -->
+<section class="parallax-section single-par" data-scrollax-parent="true">
+    <div class="bg par-elem" data-bg="<?php echo esc_url( townhub_get_attachment_thumb_link( townhub_get_option('blog_header_image' ), 'full' )  );?>" data-scrollax="properties: { translateY: '30%' }"></div>
+    <div class="overlay op7"></div>
+    <div class="container">
+        <div class="section-title center-align big-title">
+            <?php if ( have_posts() ) : ?>
+                <h1 class="head-sec-title"><?php printf( esc_html__( 'Search Results for: %s', 'townhub' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
+            <?php else : ?>
+                <h1 class="head-sec-title"><?php esc_html_e( 'Nothing Found', 'townhub' ); ?></h1>
+            <?php endif; ?>
+            <span class="section-separator"></span>
+        </div>
+    </div>
+    <div class="header-sec-link">
+        <a href="#main-sec" class="custom-scroll-link"><i class="fal fa-angle-double-down"></i></a> 
+    </div>
+</section>
+<!--  section  end-->
+<?php 
+endif;?>
+<!--section -->   
+<section class="gray-bg no-top-padding-sec pad-bot-80" id="main-sec">
+    <div class="container">
+        <?php get_template_part( 'template-parts/breadcrumbs' ); ?>
+            
+        <div class="post-container fl-wrap">
+            <div class="row">
+                <?php if( townhub_get_option('blog_layout') ==='left_sidebar' && is_active_sidebar('sidebar-1')):?>
+                <div class="col-md-<?php echo esc_attr($sb_w );?> blog-sidebar-column">
+                    <div class="blog-sidebar box-widget-wrap fl-wrap fixed-bar left-sidebar">
+                        <?php 
+                            get_sidebar(); 
+                        ?>                 
+                    </div>
+                </div>
+                <?php endif;?>
+                <?php if( townhub_get_option('blog_layout') ==='fullwidth' || !is_active_sidebar('sidebar-1')):?>
+                <div class="col-md-12 display-posts nosidebar">
+                <?php else:?>
+                <div class="col-md-<?php echo (12 - $sb_w);?> col-wrap display-posts hassidebar">
+                <?php endif;?>
+                    <div class="list-single-main-wrapper fl-wrap list-posts-wrap" id="sec2">
 
-if ($zass_offcanvas_sidebar_choice != 'none') {
-	$zass_has_offcanvas_sidebar = is_active_sidebar($zass_offcanvas_sidebar_choice);
-} else {
-	$zass_has_offcanvas_sidebar = false;
-}
+                        <?php get_template_part( 'template-parts/loop' ); ?>
 
-$zass_sidebar_classes = array();
-if ($zass_has_sidebar) {
-	$zass_sidebar_classes[] = 'has-sidebar';
-}
-if ($zass_has_offcanvas_sidebar) {
-	$zass_sidebar_classes[] = 'has-off-canvas-sidebar';
-}
+                    </div>
+                    <!-- end list-single-main-wrapper -->
+                </div>
+                <!-- end display-posts col-md-8 -->
 
-// Sidebar position
-$zass_sidebar_classes[] =  apply_filters('zass_left_sidebar_position_class', '');
-
-$zass_show_title_background = zass_get_option('show_blog_title_background');
-$zass_title_background_image = zass_get_option('blog_title_background_imgid');
-
-if ($zass_title_background_image) {
-	$zass_img = wp_get_attachment_image_src($zass_title_background_image, 'full');
-	$zass_title_background_image = $zass_img[0];
-}
-?>
-<div id="content" <?php if (!empty($zass_sidebar_classes)) echo 'class="' . esc_attr(implode(' ', $zass_sidebar_classes)) . '"'; ?> >
-	<div id="zass_page_title" class="zass_title_holder <?php if ($zass_show_title_background && $zass_title_background_image): ?>title_has_image<?php endif; ?>">
-		<?php if ($zass_show_title_background && $zass_title_background_image): ?><div class="zass-zoomable-background" style="background-image: url('<?php echo esc_url($zass_title_background_image) ?>');"></div><?php endif; ?>
-		<div class="inner fixed">
-			<!-- BREADCRUMB -->
-			<?php zass_breadcrumb() ?>
-			<!-- END OF BREADCRUMB -->
-			<!-- TITLE -->
-			<h1 class="heading-title"><?php printf(esc_html__('Search Results for: %s', 'zass'), '<span>' . get_search_query() . '</span>'); ?></h1>
-			<!-- END OF TITLE -->
-		</div>
-	</div>
-	<div class="inner">
-		<!-- CONTENT WRAPPER -->
-		<div id="main" class="fixed box box-common">
-			<div class="content_holder">
-				<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-
-						<!-- BLOG POST -->
-						<?php get_template_part('content', get_post_format()); ?>
-						<!-- END OF BLOG POST -->
-
-						<?php
-					endwhile;
-				else:
-					?>
-					<?php get_template_part('content', 'none'); ?>
-				<?php endif; ?>
-			</div>
-			<!-- SIDEBARS -->
-			<?php if ($zass_has_sidebar): ?>
-				<?php get_sidebar(); ?>
-			<?php endif; ?>
-			<?php if ($zass_has_offcanvas_sidebar): ?>
-				<?php get_sidebar('offcanvas'); ?>
-			<?php endif; ?>
-			<!-- END OF IDEBARS -->
-			<div class="clear"></div>
-
-			<!-- PAGINATION -->
-			<div class="box box-common">
-				<?php
-				if (function_exists('zass_pagination')) : zass_pagination();
-				else :
-					?>
-
-					<div class="navigation group">
-						<div class="alignleft"><?php next_posts_link(esc_html__('Next &raquo;', 'zass')) ?></div>
-						<div class="alignright"><?php previous_posts_link(esc_html__('&laquo; Back', 'zass')) ?></div>
-					</div>
-
-				<?php endif; ?>
-			</div>
-			<!-- END OF PAGINATION -->
-
-		</div>
-		<!-- END OF CONTENT WRAPPER -->
-	</div>
-</div>
-<?php
-get_footer();
+                <?php if( townhub_get_option('blog_layout') === 'right_sidebar' && is_active_sidebar('sidebar-1')):?>
+                <div class="col-md-<?php echo esc_attr($sb_w );?> blog-sidebar-column">
+                    <div class="blog-sidebar box-widget-wrap fl-wrap fixed-bar right-sidebar">
+                        <?php 
+                            get_sidebar(); 
+                        ?>                 
+                    </div>
+                </div>
+                <?php endif;?>
+            </div><!-- end row -->
+        </div><!-- end post-container -->
+    </div><!-- end container -->
+</section>
+<div class="limit-box fl-wrap"></div>
+<?php get_footer();

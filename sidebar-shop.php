@@ -1,15 +1,12 @@
 <?php
-// Shop Sidebar template
+/* banner-php */
+/**
+ * The sidebar containing the main widget area
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ *
+ */
 
-wp_reset_postdata();
-?>
-
-<?php if (function_exists('dynamic_sidebar')) : ?>
-	<div class="sidebar">
-
-		<?php if (is_active_sidebar('shop')): ?>
-			<?php dynamic_sidebar('shop'); ?>
-		<?php endif; ?>
-
-	</div>
-<?php endif;
+if(is_active_sidebar('sidebar-shop')){
+    dynamic_sidebar('sidebar-shop');
+}
