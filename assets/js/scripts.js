@@ -355,16 +355,19 @@
         $(".show-cart").on("click", function() {
             $(".cart-overlay").fadeIn(400);
             $(".cart-modal").animate({
-                right: 0
+                right: 0,
+				boxShadow: "rgba(0, 0, 0, 0.16) 0px 21px 36px"
             }, 400);
             return false;
         });
         $(".cart-overlay , .close-cart").on("click", function() {
             $(".cart-overlay").fadeOut(400);
             $(".cart-modal").animate({
-                right: "-350px"
+                right: "-350px",
+				boxShadow : 0
             }, 400);
             return false;
+			
         });
 
         $( document.body ).bind( 'added_to_cart', function( event, fragments, cart_hash ) {
@@ -395,6 +398,7 @@
                 }
             }
         });
+
 
     }
     //   Parallax ------------------
@@ -440,6 +444,9 @@
         }
         if (trueMobile) $(".bgvid , .background-vimeo , .background-youtube-wrapper ").remove();
     }
+	
+	
+	
     //   Init All ------------------
     $(function() {
         initTownHub();

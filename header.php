@@ -50,9 +50,6 @@ if(townhub_get_option('show_loader', true ) ) :
                 else echo '<a class="custom-logo-link logo-text" href="'.esc_url( home_url('/' ) ).'"><h2>'.get_bloginfo( 'name' ).'</h2></a>'; 
                 ?>
             </div>
-            <!-- header-search_btn-->         
-            <?php if(townhub_get_option('show_fixed_search', true )) echo do_shortcode( townhub_check_shortcode('[townhub_search_top]', 'townhub_search_top') );?>
-
 
             <!-- header opt -->
             <?php /* if(townhub_get_option('show_addlisting', true ))*/ echo do_shortcode( townhub_check_shortcode('[townhub_submit_button]', 'townhub_submit_button') );?>
@@ -86,6 +83,9 @@ if(townhub_get_option('show_loader', true ) ) :
                     <?php get_template_part( 'template-parts/navigation/navigation', 'top' ); ?>
                 </div><!-- .nav-holder -->
             <?php endif; ?>
+			
+			   <!-- header-search_btn-->         
+            <?php if(townhub_get_option('show_fixed_search', true )) echo do_shortcode( townhub_check_shortcode('[townhub_search_top]', 'townhub_search_top') );?>
 
         </header>
         <!--  header end -->
